@@ -4,5 +4,4 @@ build:
 release:
   image: web
   command:
-    - ./bin/pre_deploy
-    - ./bin/post_deploy
+    - ./bin/pre_deploy && ./bin/post_deploy
