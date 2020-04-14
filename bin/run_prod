@@ -2,4 +2,5 @@
 
 set -e
 
+poetry config virtualenvs.path /root/.cache/pypoetry/virtualenvs
 poetry run gunicorn -b :$PORT jpl.wsgi

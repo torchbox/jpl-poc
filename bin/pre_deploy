@@ -3,5 +3,5 @@
 set -e
 
 echo "-----> Collecting staticfiles"
-poetry config settings.virtualenvs.path /root/.cache/pypoetry/virtualenvs
+poetry config virtualenvs.path /root/.cache/pypoetry/virtualenvs
 poetry run python manage.py collectstatic --noinput

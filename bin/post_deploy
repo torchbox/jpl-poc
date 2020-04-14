@@ -3,5 +3,5 @@
 set -e
 
 echo "-----> Migrating database"
-poetry config settings.virtualenvs.path /root/.cache/pypoetry/virtualenvs
+poetry config virtualenvs.path /root/.cache/pypoetry/virtualenvs
 poetry run python manage.py migrate
