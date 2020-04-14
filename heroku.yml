@@ -1,0 +1,8 @@
+build:
+  docker:
+    web: Dockerfile
+release:
+  image: web
+  command:
+    - ./bin/pre_deploy
+    - ./bin/post_deploy
