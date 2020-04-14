@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -e
+
+docker-compose run --rm -v ~/.ssh/id_rsa:/root/.ssh/id_rsa:ro web poetry run invoke $1

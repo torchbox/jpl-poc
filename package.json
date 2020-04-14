@@ -1,0 +1,12 @@
+{
+  "name": "jpl",
+  "version": "0.1.0",
+  "main": "index.js",
+  "repository": "git@github.com:torchbox/jpl-poc.git",
+  "author": "Torchbox Ltd",
+  "license": "Copyright",
+  "private": true,
+  "dependencies": {
+    "whitenoise": "^0.0.1"
+  }
+}

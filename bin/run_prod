@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -e
+
+poetry run gunicorn -b :$PORT jpl.wsgi

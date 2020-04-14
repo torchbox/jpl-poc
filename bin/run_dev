@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -e
+
+echo "-----> Starting development environment"
+ln -sf /node_cache/jpl-poc/node_modules /app/node_modules
+PYTHONUNBUFFERED=1 ./bin/wait-for-postgres -- poetry run honcho start -f Procfile.dev
