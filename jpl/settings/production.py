@@ -16,3 +16,9 @@ except ImportError:
 WAGTAILCONTENTIMPORT_MICROSOFT_CLIENT_ID = os.getenv(
     "WAGTAILCONTENTIMPORT_MICROSOFT_CLIENT_ID", ""
 )
+
+# Make sure Django can detect a secure connection properly on Heroku:
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Redirect all requests to HTTPS
+SECURE_SSL_REDIRECT = os.getenv('DJANGO_SECURE_SSL_REDIRECT', 'off') == 'on'
