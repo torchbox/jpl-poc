@@ -1,5 +1,6 @@
 @tailwind base;
 
+/* purgecss start ignore */
 body {
   @apply antialiased text-body font-body;
 }
@@ -19,7 +20,7 @@ body {
   p {
     @apply mb-4;
   }
-  
+
   a {
     @apply text-azure;
   }
@@ -38,6 +39,7 @@ body {
     width: 100%;
   }
 }
+/* purgecss end ignore */
 
 @tailwind components;
 @tailwind utilities;
