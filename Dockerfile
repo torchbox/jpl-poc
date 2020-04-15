@@ -19,7 +19,6 @@ RUN mkdir -p /app/node_modules
 WORKDIR /node_cache/jpl-poc
 COPY package.json yarn.lock ./
 RUN yarn install
-RUN ln -s /node_cache/jpl-poc/node_modules /app/node_modules
 
 # Python dependencies
 WORKDIR /app
@@ -29,12 +28,15 @@ RUN poetry install
 
 # Copy project files
 COPY . /app
+RUN rm -rf /app/node_modules && \
+  ln -s /node_cache/jpl-poc/node_modules /app/node_modules
+
+# Compile front-end
+RUN gulp build --prod
 
 # Load shortcuts
 RUN cat bin/shortcuts >> /root/.bashrc
 
-# RUN yarn build
-RUN mkdir -p /app/_build
 RUN poetry run python manage.py collectstatic --noinput
 EXPOSE 8000
 

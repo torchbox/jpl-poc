@@ -15,6 +15,7 @@ function watchTask() {
   const watchOptions = {
     usePolling: true,
   };
+  watch("tailwind.config.js", watchOptions, styles);
   watch("static/styles/**/*.scss", watchOptions, styles);
   watch("static/images/**/*.{jpg,png}", watchOptions, images);
   watch("jpl/**/*.html", watchOptions, reload);

@@ -17,6 +17,3 @@ class StoryBlock(blocks.StreamBlock):
     paragraph = blocks.RichTextBlock(features=["bold", "italic", "ol", "ul", "link"])
     image = ImageBlock()
     embed = EmbedBlock()
-
-    class Meta:
-        template = "blocks/stream_block.html"
