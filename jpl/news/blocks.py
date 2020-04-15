@@ -4,6 +4,9 @@ from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.embeds.blocks import EmbedBlock
 from wagtail.images.blocks import ImageChooserBlock
 
+from wagtail_content_import.mappers.converters import ImageConverter, RichTextConverter 
+from wagtail_content_import.mappers.streamfield import StreamFieldMapper
+
 
 class ImageBlock(blocks.StructBlock):
     image = ImageChooserBlock()
@@ -20,3 +23,8 @@ class StoryBlock(blocks.StreamBlock):
 
     class Meta:
         template = "blocks/stream_block.html"
+
+
+class StoryBlockMapper(StreamFieldMapper):
+    html = RichTextConverter('paragraph')
+    image = ImageConverter('image')
