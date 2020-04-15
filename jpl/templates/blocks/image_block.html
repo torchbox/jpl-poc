@@ -1,0 +1,13 @@
+{% load wagtailimages_tags %}
+
+<figure class="mb-4">
+  {% image value.image max-800x450 class="mb-2" %}
+
+  <figcaption class="text-xs text-shuttleGray">
+    {{ value.image.caption }}
+
+    {% if value.image.credit %}
+      Credit: {{ value.image.credit }}
+    {% endif %}
+  </figcaption>
+</figure>

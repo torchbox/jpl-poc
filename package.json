@@ -6,7 +6,29 @@
   "author": "Torchbox Ltd",
   "license": "Copyright",
   "private": true,
-  "dependencies": {
-    "whitenoise": "^0.0.1"
-  }
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.5",
+    "@fullhuman/postcss-purgecss": "^2.1.2",
+    "autoprefixer": "^9.7.6",
+    "babel-loader": "^8.1.0",
+    "browser-sync": "^2.26.7",
+    "gulp": "^4.0.2",
+    "gulp-csso": "^4.0.1",
+    "gulp-if": "^3.0.0",
+    "gulp-imagemin": "^7.1.0",
+    "gulp-plumber": "^1.2.1",
+    "gulp-postcss": "^8.0.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-sass-glob": "^1.1.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "tailwindcss": "^1.2.0",
+    "webpack": "^4.42.1",
+    "webpack-messages": "^2.0.4",
+    "yargs": "^15.3.1"
+  },
+  "browserslist": [
+    "last 2 versions"
+  ]
 }

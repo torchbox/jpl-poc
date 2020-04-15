@@ -21,6 +21,9 @@ env = environ.Env(
     ALLOWED_HOSTS=(list, ["localhost", "127.0.0.1"]),
     DATABASE_URL=(str, "sqlite:///%s" % os.path.join(BASE_DIR, "db.sqlite3")),
     SECRET_KEY=(str, "dev-key"),
+    AWS_ACCESS_KEY_ID=(str, ""),
+    AWS_SECRET_ACCESS_KEY=(str, ""),
+    AWS_STORAGE_BUCKET_NAME=(str, ""),
 )
 
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
@@ -135,11 +138,13 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
-STATICFILES_DIRS = [os.path.join(PROJECT_DIR, "static")]
-
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+# Uncompiled static files: static
+# Compiled static files: _build
+# Collected static files: staticfiles
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "_build")]
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATIC_URL = "/static/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
@@ -150,6 +155,7 @@ MEDIA_URL = "/media/"
 WAGTAIL_SITE_NAME = "JPL"
 WAGTAILIMAGES_IMAGE_MODEL = "images.CustomImage"
 WAGTAILIMAGES_FEATURE_DETECTION_ENABLED = False
+WAGTAILEMBEDS_RESPONSIVE_HTML = True
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash

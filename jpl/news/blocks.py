@@ -21,9 +21,6 @@ class StoryBlock(blocks.StreamBlock):
     image = ImageBlock()
     embed = EmbedBlock()
 
-    class Meta:
-        template = "blocks/stream_block.html"
-
 
 class StoryBlockMapper(StreamFieldMapper):
     html = RichTextConverter('paragraph')
