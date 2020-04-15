@@ -6,12 +6,15 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
+from wagtail_content_import import urls as wagtail_content_import_urls
+
 from .search import views as search_views
 
 urlpatterns = [
     path("django-admin/", admin.site.urls),
     path("admin/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
+    path("import/", include(wagtail_content_import_urls)),
     # path("search/$", search_views.search, name="search"),
 ]
 

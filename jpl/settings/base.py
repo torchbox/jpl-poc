@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     "jpl.home",
     "jpl.search",
     "jpl.news",
+    "wagtail_content_import",
+    "wagtail_content_import.pickers.microsoft",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",
@@ -158,3 +160,5 @@ WAGTAILEMBEDS_RESPONSIVE_HTML = True
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 BASE_URL = "https://jpl-poc.torchbox.com"
+
+WAGTAILCONTENTIMPORT_DEFAULT_MAPPER = 'jpl.news.blocks.StoryBlockMapper'
