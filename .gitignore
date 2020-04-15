@@ -101,3 +101,4 @@ dump.rdb
 tags*
 *.db
 .nvimrc
+node_modules
