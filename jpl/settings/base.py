@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     "jpl.home",
     "jpl.search",
     "jpl.news",
+    "wagtail_content_import",
+    "wagtail_content_import.pickers.microsoft",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",
