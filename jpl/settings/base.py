@@ -33,9 +33,10 @@ SECRET_KEY = env("SECRET_KEY")
 # Application definition
 
 INSTALLED_APPS = [
-    'home',
-    'search',
-    'news',
+    'jpl.images',
+    'jpl.home',
+    'jpl.search',
+    'jpl.news',
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -148,9 +149,6 @@ STATICFILES_DIRS = [
     os.path.join(PROJECT_DIR, 'static'),
 ]
 
-# ManifestStaticFilesStorage is recommended in production, to prevent outdated
-# Javascript / CSS assets being served from cache (e.g. after a Wagtail upgrade).
-# See https://docs.djangoproject.com/en/3.0/ref/contrib/staticfiles/#manifeststaticfilesstorage
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
@@ -161,8 +159,10 @@ MEDIA_URL = '/media/'
 
 
 # Wagtail settings
+WAGTAIL_SITE_NAME = "Jet Propulsion Laboratory"
+WAGTAILIMAGES_IMAGE_MODEL = "images.CustomImage"
+WAGTAILIMAGES_FEATURE_DETECTION_ENABLED = False
 
-WAGTAIL_SITE_NAME = "jpl"
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
