@@ -7,7 +7,9 @@ from wagtail.images import get_image_model_string
 from wagtail.images.api.fields import ImageRenditionField
 from wagtail.images.edit_handlers import ImageChooserPanel
 
-from .blocks import StoryBlock
+from wagtail_content_import.models import ContentImportMixin
+
+from .blocks import StoryBlock, StoryBlockMapper
 
 
 class NewsIndex(Page):
@@ -15,7 +17,7 @@ class NewsIndex(Page):
     subpage_types = ["news.NewsPage"]
 
 
-class NewsPage(Page):
+class NewsPage(ContentImportMixin, Page):
     parent_page_types = ["news.NewsIndex"]
 
     publication_date = models.DateTimeField(
@@ -37,6 +39,8 @@ class NewsPage(Page):
         help_text="Image used for the banner and thumbnail on the index page.",
     )
     body = StreamField(StoryBlock())
+
+    mapper_class = StoryBlockMapper
 
     content_panels = Page.content_panels + [
         FieldPanel("publication_date"),
