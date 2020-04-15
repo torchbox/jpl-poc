@@ -15,6 +15,7 @@ whitenoise = "^5.0.1"
 wagtail_content_import = "^0.3.3"
 django-storages = "^1.9.1"
 boto3 = "^1.12.39"
+django-cors-headers = "^3.2.1"
 
 [tool.poetry.dev-dependencies]
 isort = "^4.3.21"
