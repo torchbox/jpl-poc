@@ -21,6 +21,9 @@ env = environ.Env(
     ALLOWED_HOSTS=(list, ["localhost", "127.0.0.1"]),
     DATABASE_URL=(str, "sqlite:///%s" % os.path.join(BASE_DIR, "db.sqlite3")),
     SECRET_KEY=(str, "dev-key"),
+    AWS_ACCESS_KEY_ID=(str, ""),
+    AWS_SECRET_ACCESS_KEY=(str, ""),
+    AWS_STORAGE_BUCKET_NAME=(str, ""),
 )
 
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
