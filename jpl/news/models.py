@@ -50,6 +50,7 @@ class NewsPage(ContentImportMixin, Page):
     ]
 
     api_fields = [
+        APIField("publication_date"),
         APIField("introduction"),
         APIField("body"),
         APIField("hero_banner"),
