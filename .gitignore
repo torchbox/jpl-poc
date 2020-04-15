@@ -90,7 +90,7 @@ ENV/
 
 db.sqlite3
 _build/
-node_modules/
+node_modules
 bower_components/
 staticfiles/
 media/

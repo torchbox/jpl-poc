@@ -11,7 +11,7 @@ RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
   apt-get install -y nodejs=12\*
 
 RUN pip install poetry
-RUN npm install -g yarn
+RUN npm install -g yarn gulp-cli
 
 # Node dependencies
 RUN mkdir -p /node_cache/jpl-poc
@@ -34,7 +34,8 @@ COPY . /app
 RUN cat bin/shortcuts >> /root/.bashrc
 
 # RUN yarn build
-RUN poetry run python manage.py collectstatic
+RUN mkdir -p /app/_build
+RUN poetry run python manage.py collectstatic --noinput
 EXPOSE 8000
 
 CMD ["bin/run_prod"]
