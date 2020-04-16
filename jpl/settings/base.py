@@ -175,3 +175,5 @@ WAGTAILCONTENTIMPORT_DEFAULT_MAPPER = "jpl.news.blocks.StoryBlockMapper"
 BASE_URL = "https://jpl-poc.torchbox.com"
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+WAGTAILCONTENTIMPORT_DOCX_PARSER = 'jpl.news.parser.DocxHTMLParser'
