@@ -2,6 +2,30 @@
 
 {% load smarty_tags wagtailcore_tags wagtailimages_tags %}
 
+{% block extra_head %}
+  {# Twitter summary card with large image #}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@NASAJPL" />
+  <meta name="twitter:title" content="{{ page.title|smartypants }}" />
+  <meta name="twitter:description" content="{{ page.introduction }}">
+  {# Twitter optimized 2:1 aspect ratio #}
+  {% image page.hero_banner fill-1500x750 as twitter_image %}
+  <meta name="twitter:image" content="{{ twitter_image.url }}">
+  <meta name="twitter:image:alt" content="{{ page.hero_banner.alt }}">
+
+  {# Facebook opengraph tags #}
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="NASA JPL" />
+  <meta property="og:url" content="{{ request.site.root_url }}{% pageurl page %}" />
+  <meta property="og:title" content="{{ page.title }}" />
+  <meta property="og:description" content="{{ page.introduction }}" />
+  {# FB optimized 1:1 aspect ratio #}
+  {% image page.hero_banner fill-1500x1500 as fb_image %}
+  <meta property="og:image" content="{{ fb_image.url }}" />
+  <meta property="og:image:width" content="1500" />
+  <meta property="og:image:height" content="1500" />
+{% endblock extra_head %}
+
 {% block content %}
   <main class="max-w-container mx-auto px-2 py-4 md:p-6 lg:p-12 xl:px-4 2xl:px-0">
     <div class="heading uppercase text-sm mb-2">
