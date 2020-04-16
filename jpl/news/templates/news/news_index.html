@@ -1,1 +1,42 @@
 {% extends "base.html" %}
+
+{% load smarty_tags wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+  <main class="max-w-container mx-auto px-2 py-6 md:px-6 2xl:px-0">
+    <h1 class="heading text-4xl lg:text-5xl">All News</h1>
+
+    <ul class="mb-4 pb-4 border-b border-silver">
+      {% for post in posts %}
+        <li class="pt-4 mt-4 border-t border-silver">
+          <a href="{% pageurl post %}" class="md:flex md:flex-row md:-mx-2">
+            <div class="hidden md:block md:px-2 md:w-1/3 lg:md-1/6">
+                {% image post.hero_banner fill-400x225 %}
+            </div>
+
+            <div class="md:px-2 md:w-2/3 lg:w-5/6">
+              <div class="flex flex-row -mx-1 md:mx-0 max-w-2xl">
+                <div class="w-2/3 px-1 md:w-full md:px-0">
+                  <span class="lg:text-lg">
+                    {{ post.publication_date|date:"F j, Y" }}
+                  </span>
+                  <div class="heading text-lg md:text-xl lg:text-2xl">
+                    {{ post.title|smartypants }}
+                  </div>
+                </div>
+
+                <div class="w-1/3 px-1 md:hidden">
+                  {% image post.hero_banner fill-200x113 %}
+                </div>
+              </div>
+
+              <span class="lg:text-lg">
+                {{ post.introduction }}
+              </span>
+            </div>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </main>
+{% endblock content %}

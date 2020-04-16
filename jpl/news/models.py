@@ -65,6 +65,15 @@ class NewsIndex(Page):
     parent_page_types = ["home.HomePage"]
     subpage_types = ["news.NewsPage"]
 
+    def get_context(self, request):
+        context = super().get_context(request)
+
+        context["posts"] = (
+            NewsPage.objects.descendant_of(self).live().order_by("-publication_date")
+        )
+
+        return context
+
 
 class NewsPage(ContentImportMixin, Page):
     parent_page_types = ["news.NewsIndex"]
