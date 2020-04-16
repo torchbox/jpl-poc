@@ -162,11 +162,14 @@ WAGTAIL_SITE_NAME = "JPL"
 WAGTAILIMAGES_IMAGE_MODEL = "images.CustomImage"
 WAGTAILIMAGES_FEATURE_DETECTION_ENABLED = False
 WAGTAILEMBEDS_RESPONSIVE_HTML = True
+WAGTAILEMBEDS_FINDERS = [
+    {"class": "jpl.news.embed.NASAEyes"},
+    {"class": "wagtail.embeds.finders.oembed"},
+]
+WAGTAILCONTENTIMPORT_DEFAULT_MAPPER = "jpl.news.blocks.StoryBlockMapper"
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 BASE_URL = "https://jpl-poc.torchbox.com"
-
-WAGTAILCONTENTIMPORT_DEFAULT_MAPPER = "jpl.news.blocks.StoryBlockMapper"
 
 CORS_ORIGIN_ALLOW_ALL = True
