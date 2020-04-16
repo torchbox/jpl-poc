@@ -1,0 +1,15 @@
+{% load wagtailcore_tags %}
+
+<figure class="mb-4">
+  <div class="mb-2">
+    {% include_block value.embed %}
+  </div>
+
+  <figcaption class="text-xs text-shuttleGray">
+    {{ value.caption }}
+
+    {% if value.credit %}
+      Credit: {{ value.credit }}
+    {% endif %}
+  </figcaption>
+</figure>
