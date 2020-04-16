@@ -4,12 +4,12 @@
 
 {% block content %}
   <main class="max-w-container mx-auto px-2 py-4 md:p-6 lg:p-12 xl:px-4 2xl:px-0">
-    <div class="uppercase font-bold text-sm tracking-tighter mb-2">
+    <div class="heading uppercase text-sm mb-2">
       <a class="text-link" href="{% pageurl page.get_parent %}">{{ page.get_parent.title }}</a>
       | {{ page.publication_date|date:"F j, Y" }}
     </div>
 
-    <h1 class="font-bold text-3xl tracking-tighter mb-4 md:text-4xl lg:text-5xl">{{ page.title|smartypants }}</h1>
+    <h1 class="heading text-3xl mb-4 md:text-4xl lg:text-5xl">{{ page.title|smartypants }}</h1>
 
     <figure class="mb-4">
       {% image page.hero_banner fill-1200x675 class="mb-2" %}
@@ -34,9 +34,46 @@
         {% include_block page.body %}
       </article>
 
-      <aside></aside>
-
     </div>
-
   </main>
+
+  {% with related_links=page.related_links.all %}
+    <div class="bg-mystic">
+      <div class="max-w-container mx-auto px-2 py-6 md:px-6 md:py-8 lg:py-12 2xl:px-0">
+        <h2 class="heading text-center text-3xl mb-4 md:mb-6 md:text-4xl">
+          You Might Also Like
+        </h2>
+
+        <ul class="mb-10 md:flex md:flex-row md:-mx-2 md:mb-14 lg:mb-20">
+          {% for related_link in page.related_links.all %}
+            {% with related_page=related_link.related_page.specific %}
+              <li class="mb-4 md:mb-0 md:w-1/3 md:px-2">
+                <a href="{% pageurl related_page %}" class="group">
+                  <div class="relative">
+                    {% image related_page.hero_banner fill-400x225 class="mb-2" %}
+
+                    <div class="bg-blueBayoux absolute inset-0 p-4 text-white flex flex-col opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+                      <span class="flex-1">
+                        {{ related_page.introduction }}
+                      </span>
+
+                      <svg class="w-4 h-4 self-end fill-current"><use xlink:href="#svg--forward"></use></svg>
+                    </div>
+                  </div>
+
+                  <span class="font-bold">
+                    {{ related_page.title|smartypants }}
+                  </span>
+                </a>
+              </li>
+            {% endwith %}
+          {% endfor %}
+        </ul>
+
+        <div class="text-center">
+          <a href="{% pageurl page.get_parent %}" class="font-bold uppercase text-sm border-2 border-shuttleGray text-shuttleGray p-2 rounded-lg">More News</a>
+        </div>
+      </div>
+    </div>
+  {% endwith %}
 {% endblock content %}

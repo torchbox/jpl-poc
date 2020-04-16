@@ -1,44 +1,7 @@
 @tailwind base;
 
 /* purgecss start ignore */
-body {
-  @apply antialiased text-body font-body;
-}
-
-.block-paragraph,
-.block-image,
-.block-embed {
-  @apply mb-4;
-}
-
-.rich-text {
-  img {
-    height: auto;
-    max-width: 100%;
-  }
-
-  p {
-    @apply mb-4;
-  }
-
-  a {
-    @apply text-azure;
-  }
-}
-
-.responsive-object {
-  position: relative;
-
-  iframe,
-  object,
-  embed {
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-  }
-}
+@import "globals/*";
 /* purgecss end ignore */
 
 @tailwind components;

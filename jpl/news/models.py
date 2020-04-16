@@ -5,14 +5,16 @@ from modelcluster.tags import ClusterTaggableManager
 from taggit.models import TaggedItemBase
 from wagtail.admin.edit_handlers import (
     FieldPanel,
+    InlinePanel,
     MultiFieldPanel,
     ObjectList,
+    PageChooserPanel,
     StreamFieldPanel,
     TabbedInterface,
 )
 from wagtail.api import APIField
 from wagtail.core.fields import StreamField
-from wagtail.core.models import Page
+from wagtail.core.models import Orderable, Page
 from wagtail.images import get_image_model_string
 from wagtail.images.api.fields import ImageRenditionField
 from wagtail.images.edit_handlers import ImageChooserPanel
@@ -40,6 +42,23 @@ class NewsCategory(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class RelatedLink(Orderable, models.Model):
+    parent = ParentalKey(
+        "news.NewsPage", on_delete=models.CASCADE, related_name="related_links"
+    )
+    related_page = models.ForeignKey(
+        "wagtailcore.Page",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name="+",
+    )
+
+    panels = [
+        PageChooserPanel("related_page", "news.NewsPage"),
+    ]
 
 
 class NewsIndex(Page):
@@ -91,11 +110,15 @@ class NewsPage(ContentImportMixin, Page):
         FieldPanel("tags"),
     ]
 
+    promote_panels = Page.promote_panels + [
+        InlinePanel("related_links", label="Related links", max_num=3)
+    ]
+
     edit_handler = TabbedInterface(
         [
             ObjectList(content_panels, heading="Content"),
             ObjectList(taxonomy_panels, heading="Taxonomy"),
-            ObjectList(Page.promote_panels, heading="Promote"),
+            ObjectList(promote_panels, heading="Promote"),
             ObjectList(Page.settings_panels, heading="Settings", classname="settings"),
         ]
     )
