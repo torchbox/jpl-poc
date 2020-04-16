@@ -11,4 +11,4 @@ scrapy crawl news -o news.json
 
 3. Import into Wagtail
 
-`./manage.py importnews https://gist.github.com/tomdyson/097135356e6c748499ee3de68b560691`
+`./manage.py importnews https://gist.githubusercontent.com/tomdyson/097135356e6c748499ee3de68b560691/raw/af1ede5f00426bfd5626ef20c80ef1acf6e995be/jpl-news.json`
