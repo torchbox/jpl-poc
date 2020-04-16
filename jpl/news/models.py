@@ -1,5 +1,9 @@
+import re
+
 from django import forms
 from django.db import models
+from django.utils.html import mark_safe, strip_tags
+from django.utils.text import slugify
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from modelcluster.tags import ClusterTaggableManager
 from taggit.models import TaggedItemBase
@@ -15,10 +19,14 @@ from wagtail.admin.edit_handlers import (
 from wagtail.api import APIField
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Orderable, Page
+from wagtail.core.rich_text import RichText
 from wagtail.images import get_image_model_string
 from wagtail.images.api.fields import ImageRenditionField
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.models import register_snippet
+
+from dateutil.parser import parse
+from dateutil.parser._parser import ParserError
 
 from wagtail_content_import.models import ContentImportMixin
 
@@ -150,3 +158,67 @@ class NewsPage(ContentImportMixin, Page):
             serializer=ImageRenditionField("fill-400x200", source="hero_banner"),
         ),
     ]
+
+
+    @classmethod
+    def create_from_import(cls, parsed_doc, user):
+        """
+        Factory method to create the Page and populate it from a parsed document.
+        """
+
+        date = None
+        title = None
+        introduction = None
+        mapper_class = cls.mapper_class
+        mapper = mapper_class()
+        imported_data = mapper.map(parsed_doc['elements'], user=user)
+
+        date_matching_pattern =  re.compile(r"""
+        [a-z]+  # at least one ascii letter (month)
+        \s      # one space after
+        \d\d?   # one or two digits (day)
+        (?:th)?   # optional 'th'
+        ,?      # an optional comma
+        \s      # one space after
+        \d{4}   # four digits (year)
+        """,re.IGNORECASE|re.VERBOSE)
+
+        bold_title_matching_pattern = re.compile(r"<b>(.*[a-z].*)</b>", re.IGNORECASE)
+
+        streamfield_data = []
+        for block_name, value in imported_data:
+            if not title:
+                # Don't import anything before the title (first bit of bold text) into the streamfield proper
+                if not date:
+                    # If there's a date before the title, import the first one as the publication date
+
+                    results = date_matching_pattern.findall(str(value))
+                    for match in results:
+                        try:
+                            date = parse(match)
+                            break
+                        except ParserError:
+                            pass
+                bold_text = bold_title_matching_pattern.search(str(value))
+                if bold_text:
+                    # If the title is coming from RichText, it has already been cleaned of all non-Draftail compatible tags
+                    title = mark_safe(strip_tags(bold_text.group())) if isinstance(value, RichText) else strip_tags(bold_text.group())
+                continue
+            elif "-end-" in str(value):
+                # Don't import anything after "-end-"
+                break
+            elif not introduction:
+                # Don't import anything before the intro
+                # If the intro is coming from RichText, it has already been cleaned of all non-Draftail compatible tags
+                introduction = mark_safe(strip_tags(value)) if isinstance(value, RichText) else strip_tags(value)
+            else:
+                streamfield_data.append((block_name, value))
+
+        return cls(
+            title=title,
+            introduction=introduction,
+            slug=slugify(title),
+            body=streamfield_data,
+            owner=user,
+            publication_date=date,
+        )
