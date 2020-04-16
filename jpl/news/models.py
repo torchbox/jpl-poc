@@ -102,6 +102,10 @@ class NewsPage(ContentImportMixin, Page):
     categories = ParentalManyToManyField("news.NewsCategory", blank=True)
     tags = ClusterTaggableManager(through="news.NewsPageTag", blank=True)
 
+    source = models.TextField(
+        blank=True, help_text="Where was this content imported from?",
+    )
+
     mapper_class = StoryBlockMapper
 
     content_panels = Page.content_panels + [
@@ -123,12 +127,16 @@ class NewsPage(ContentImportMixin, Page):
         InlinePanel("related_links", label="Related links", max_num=3)
     ]
 
+    settings_panels = Page.settings_panels + [
+        FieldPanel("source"),
+    ]
+
     edit_handler = TabbedInterface(
         [
             ObjectList(content_panels, heading="Content"),
             ObjectList(taxonomy_panels, heading="Taxonomy"),
             ObjectList(promote_panels, heading="Promote"),
-            ObjectList(Page.settings_panels, heading="Settings", classname="settings"),
+            ObjectList(settings_panels, heading="Settings", classname="settings"),
         ]
     )
 
