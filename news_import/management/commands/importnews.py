@@ -28,13 +28,26 @@ class Command(BaseCommand):
         # import news pages
         news_items = requests.get(news_export_url).json()
         for news_item in news_items:
+
+            streamfield_paras = []
+            for para in news_item["paras"]:
+                # print('dirty: ' + para)
+                para = (
+                    para.replace("<p>", "").replace("</p>", "").replace("<br>", "<br/>")
+                )
+                # print('dirty: ' + para)
+                if len(para):
+                    p = {u"type": u"paragraph", u"value": para}
+                    streamfield_paras.append(p)
+
             news_page = NewsPage(
                 title=news_item["title"],
                 introduction=news_item["introduction"],
                 source=news_item["url"],
+                body=json.dumps(streamfield_paras),
             )
+
             if news_item["image"]:
-                print("has an image")
                 response = requests.get(news_item["image"])
                 filename = news_item["image"].split("/")[-1]
                 image = CustomImage(
