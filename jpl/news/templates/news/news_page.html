@@ -33,12 +33,12 @@
       | {{ page.publication_date|date:"F j, Y" }}
     </div>
 
-    <h1 class="heading text-3xl mb-4 md:text-4xl leading-tight lg:text-5xl">{{ page.title|smartypants }}</h1>
+    <h1 class="heading text-3xl mb-4 md:text-4xl leading-tight lg:text-5xl" data-contentpath-field="title">{{ page.title|smartypants }}</h1>
 
     <figure class="mb-4">
       {% image page.hero_banner fill-1200x675 class="mb-2" %}
 
-      <figcaption class="text-xs text-shuttleGray">
+      <figcaption class="text-xs text-shuttleGray" data-contentpath-field="hero_banner">
         {{ page.hero_banner.caption }}
 
         {% if page.hero_banner.credit %}
@@ -51,11 +51,12 @@
 
       {# main column#}
       <article class="md:w-2/3 lg:w-7/12">
-        <div class="italic py-3 border-silver border-t border-b mb-4">
+        <div class="italic py-3 border-silver border-t border-b mb-4" data-contentpath-field="introduction">
           {{ page.introduction }}
         </div>
-
-        {% include_block page.body %}
+        <div data-contentpath-field="body">
+          {% include_block page.body %}
+        </div>
       </article>
 
     </div>
