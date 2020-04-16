@@ -33,5 +33,6 @@ class StoryBlock(blocks.StreamBlock):
 
 
 class StoryBlockMapper(StreamFieldMapper):
+    heading = RichTextConverter('paragraph')
     html = RichTextConverter('paragraph')
     image = ImageConverter('image')
