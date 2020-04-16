@@ -44,6 +44,7 @@ class NewsSpider(scrapy.Spider):
 
     def parse(self, response):
         yield {
+            "url": response.xpath("//link[@rel='canonical']/@href").get(),
             "title": response.xpath("//meta[@property='og:title']/@content").get(),
             "introduction": response.xpath(
                 "//meta[@property='og:description']/@content"
