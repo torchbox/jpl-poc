@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "corsheaders",
     "smarty",
+    "news_import",
 ]
 
 MIDDLEWARE = [
