@@ -44,6 +44,7 @@ class Command(BaseCommand):
                 title=news_item["title"],
                 introduction=news_item["introduction"],
                 source=news_item["url"],
+                publication_date=news_item["updated_at"] + "-0800",
                 body=json.dumps(streamfield_paras),
             )
 
