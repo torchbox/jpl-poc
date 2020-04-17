@@ -4,7 +4,10 @@ from django.conf import settings
 
 
 class IContactAPI:
-    def __init__(self, icontact_settings=settings.ICONTACT_SETTINGS):
+    def __init__(self, icontact_settings=None):
+        if not icontact_settings:
+            icontact_settings = settings.ICONTACT_SETTINGS
+
         self.url = icontact_settings["url"]
         self.version = icontact_settings["version"]
         self.app_id = icontact_settings["app_id"]
