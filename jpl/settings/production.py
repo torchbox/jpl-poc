@@ -8,10 +8,14 @@ AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
 
-try:
-    from .local import *
-except ImportError:
-    pass
+ICONTACT_SETTINGS = {
+    "version": "2.2",
+    "url": env("ICONTACT_URL"),
+    "app_id": env("ICONTACT_APP_ID"),
+    "username": env("ICONTACT_USERNAME"),
+    "password": env("ICONTACT_PASSWORD"),
+    "campaign_id": env("ICONTACT_CAMPAIGN_ID"),
+}
 
 WAGTAILCONTENTIMPORT_MICROSOFT_CLIENT_ID = os.getenv(
     "WAGTAILCONTENTIMPORT_MICROSOFT_CLIENT_ID", ""
@@ -22,3 +26,8 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Redirect all requests to HTTPS
 SECURE_SSL_REDIRECT = os.getenv('DJANGO_SECURE_SSL_REDIRECT', 'off') == 'on'
+
+try:
+    from .local import *
+except ImportError:
+    pass

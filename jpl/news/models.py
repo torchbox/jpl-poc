@@ -1,4 +1,7 @@
+from bs4 import BeautifulSoup
 from django import forms
+from django.template.loader import render_to_string
+from django.conf import settings
 from django.db import models
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from modelcluster.tags import ClusterTaggableManager
@@ -15,11 +18,13 @@ from wagtail.admin.edit_handlers import (
 from wagtail.api import APIField
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Orderable, Page
+from wagtail.core.signals import page_published
 from wagtail.images import get_image_model_string
 from wagtail.images.api.fields import ImageRenditionField
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.models import register_snippet
 
+from jpl.icontact.models import Message
 from wagtail_content_import.models import ContentImportMixin
 
 from .blocks import StoryBlock, StoryBlockMapper
@@ -102,6 +107,11 @@ class NewsPage(ContentImportMixin, Page):
     categories = ParentalManyToManyField("news.NewsCategory", blank=True)
     tags = ClusterTaggableManager(through="news.NewsPageTag", blank=True)
 
+    publish_to_icontact = models.BooleanField(
+        default=False,
+        help_text="If checked, a draft message will be created on iContact the next time this page is published",
+    )
+
     mapper_class = StoryBlockMapper
 
     content_panels = Page.content_panels + [
@@ -123,12 +133,16 @@ class NewsPage(ContentImportMixin, Page):
         InlinePanel("related_links", label="Related links", max_num=3)
     ]
 
+    settings_panels = Page.settings_panels + [
+        FieldPanel("publish_to_icontact"),
+    ]
+
     edit_handler = TabbedInterface(
         [
             ObjectList(content_panels, heading="Content"),
             ObjectList(taxonomy_panels, heading="Taxonomy"),
             ObjectList(promote_panels, heading="Promote"),
-            ObjectList(Page.settings_panels, heading="Settings", classname="settings"),
+            ObjectList(settings_panels, heading="Settings", classname="settings"),
         ]
     )
 
@@ -142,3 +156,29 @@ class NewsPage(ContentImportMixin, Page):
             serializer=ImageRenditionField("fill-400x200", source="hero_banner"),
         ),
     ]
+
+
+def publish_to_icontact(sender, instance, **kwargs):
+    if instance.publish_to_icontact:
+        # Reset flag
+        instance.publish_to_icontact = False
+        instance.save()
+
+        context = {'page': instance}
+        html_body = render_to_string('news/news_page_icontact.html', context)
+        soup = BeautifulSoup(render_to_string('news/news_page_icontact.txt', context))
+        text_body = '\n'.join(line.strip() for line in soup.get_text().splitlines())
+
+        # Create message
+        # Creating the message will also create it on iContact
+        Message.objects.create(
+            campaign_id=settings.ICONTACT_SETTINGS["campaign_id"],
+            message_name=f"{sender.__name__}: {instance.pk}",
+            subject=instance.title,
+            html_body=html_body,
+            text_body=text_body,
+            source_page=instance,
+        )
+
+
+page_published.connect(publish_to_icontact, sender=NewsPage)

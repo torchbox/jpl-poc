@@ -102,3 +102,4 @@ tags*
 *.db
 .nvimrc
 node_modules
+jpl/settings/local.py
