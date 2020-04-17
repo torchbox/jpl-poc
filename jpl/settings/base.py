@@ -29,6 +29,14 @@ env = environ.Env(
     ICONTACT_USERNAME=(str, ""),
     ICONTACT_PASSWORD=(str, ""),
     ICONTACT_CAMPAIGN_ID=(int, ""),
+    EMAIL_HOST=(str, ""),
+    EMAIL_PORT=(int, ""),
+    EMAIL_HOST_USER=(str, ""),
+    EMAIL_HOST_PASSWORD=(str, ""),
+    EMAIL_USE_TLS=(bool, False),
+    EMAIL_USE_SSL=(bool, False),
+    EMAIL_SUBJECT_PREFIX=(str, ""),
+    SERVER_EMAIL=(str, ""),
 )
 
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
@@ -184,31 +192,3 @@ BASE_URL = "https://jpl-poc.torchbox.com"
 CORS_ORIGIN_ALLOW_ALL = True
 
 WAGTAILCONTENTIMPORT_DOCX_PARSER = "jpl.news.parser.DocxHTMLParser"
-
-# Email settings
-if "EMAIL_HOST" in env:
-    EMAIL_HOST = env["EMAIL_HOST"]
-
-if "EMAIL_PORT" in env:
-    try:
-        EMAIL_PORT = int(env["EMAIL_PORT"])
-    except ValueError:
-        pass
-
-if "EMAIL_HOST_USER" in env:
-    EMAIL_HOST_USER = env["EMAIL_HOST_USER"]
-
-if "EMAIL_HOST_PASSWORD" in env:
-    EMAIL_HOST_PASSWORD = env["EMAIL_HOST_PASSWORD"]
-
-if env.get("EMAIL_USE_TLS", "false").lower().strip() == "true":
-    EMAIL_USE_TLS = True
-
-if env.get("EMAIL_USE_SSL", "false").lower().strip() == "true":
-    EMAIL_USE_SSL = True
-
-if "EMAIL_SUBJECT_PREFIX" in env:
-    EMAIL_SUBJECT_PREFIX = env["EMAIL_SUBJECT_PREFIX"]
-
-if "SERVER_EMAIL" in env:
-    SERVER_EMAIL = DEFAULT_FROM_EMAIL = env["SERVER_EMAIL"]
