@@ -17,7 +17,7 @@ class MessageAdmin(ModelAdmin):
 
 
 class IContactAdminGroup(ModelAdminGroup):
-    menu_label = 'iContact'
+    menu_label = 'Mailings'
     menu_order = 500
     menu_icon = "mail"
     items = (MessageAdmin,)

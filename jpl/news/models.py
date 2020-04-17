@@ -1,6 +1,8 @@
+import html
 import re
 
-from bs4 import BeautifulSoup
+from dateutil.parser import parse
+from dateutil.parser._parser import ParserError
 from django import forms
 from django.conf import settings
 from django.db import models
@@ -28,9 +30,6 @@ from wagtail.images import get_image_model_string
 from wagtail.images.api.fields import ImageRenditionField
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.models import register_snippet
-
-from dateutil.parser import parse
-from dateutil.parser._parser import ParserError
 
 from jpl.icontact.models import Message
 from wagtail_content_import.models import ContentImportMixin
@@ -180,9 +179,10 @@ class NewsPage(ContentImportMixin, Page):
         introduction = None
         mapper_class = cls.mapper_class
         mapper = mapper_class()
-        imported_data = mapper.map(parsed_doc['elements'], user=user)
+        imported_data = mapper.map(parsed_doc["elements"], user=user)
 
-        date_matching_pattern = re.compile(r"""
+        date_matching_pattern = re.compile(
+            r"""
         [a-z]+  # at least one ascii letter (month)
         \s      # one space after
         \d\d?   # one or two digits (day)
@@ -190,7 +190,9 @@ class NewsPage(ContentImportMixin, Page):
         ,?      # an optional comma
         \s      # one space after
         \d{4}   # four digits (year)
-        """, re.IGNORECASE | re.VERBOSE)
+        """,
+            re.IGNORECASE | re.VERBOSE,
+        )
 
         bold_title_matching_pattern = re.compile(r"<b>(.*[a-z].*)</b>", re.IGNORECASE)
 
@@ -211,7 +213,11 @@ class NewsPage(ContentImportMixin, Page):
                 bold_text = bold_title_matching_pattern.search(str(value))
                 if bold_text:
                     # If the title is coming from RichText, it has already been cleaned of all non-Draftail compatible tags
-                    title = mark_safe(strip_tags(bold_text.group())) if isinstance(value, RichText) else strip_tags(bold_text.group())
+                    title = (
+                        mark_safe(strip_tags(bold_text.group()))
+                        if isinstance(value, RichText)
+                        else strip_tags(bold_text.group())
+                    )
                 continue
             elif "-end-" in str(value):
                 # Don't import anything after "-end-"
@@ -219,7 +225,11 @@ class NewsPage(ContentImportMixin, Page):
             elif not introduction:
                 # Don't import anything before the intro
                 # If the intro is coming from RichText, it has already been cleaned of all non-Draftail compatible tags
-                introduction = mark_safe(strip_tags(value)) if isinstance(value, RichText) else strip_tags(value)
+                introduction = (
+                    mark_safe(strip_tags(value))
+                    if isinstance(value, RichText)
+                    else strip_tags(value)
+                )
             else:
                 streamfield_data.append((block_name, value))
 
@@ -239,10 +249,11 @@ def publish_to_icontact(sender, instance, **kwargs):
         instance.publish_to_icontact = False
         instance.save()
 
-        context = {'page': instance}
-        html_body = render_to_string('news/news_page_icontact.html', context)
-        soup = BeautifulSoup(render_to_string('news/news_page_icontact.txt', context))
-        text_body = '\n'.join(line.strip() for line in soup.get_text().splitlines())
+        context = {"page": instance}
+        html_body = render_to_string("news/news_page_icontact.html", context)
+        text_body = html.unescape(
+            strip_tags(render_to_string("news/news_page_icontact.txt", context))
+        )
 
         # Create message
         # Creating the message will also create it on iContact
