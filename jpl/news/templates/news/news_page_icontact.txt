@@ -1,0 +1,12 @@
+{% load wagtailcore_tags %}
+
+{{ page.title }}
+{% for c in page.title %}-{% endfor %}
+
+{{ page.introduction }}
+
+{% for block in page.body %}
+  {% if block.block_type == 'paragraph' %}
+    {% include_block block %}
+  {% endif %}
+{% endfor %}

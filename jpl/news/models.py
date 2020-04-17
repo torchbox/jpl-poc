@@ -1,7 +1,10 @@
 import re
 
+from bs4 import BeautifulSoup
 from django import forms
+from django.conf import settings
 from django.db import models
+from django.template.loader import render_to_string
 from django.utils.html import mark_safe, strip_tags
 from django.utils.text import slugify
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
@@ -20,6 +23,7 @@ from wagtail.api import APIField
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Orderable, Page
 from wagtail.core.rich_text import RichText
+from wagtail.core.signals import page_published
 from wagtail.images import get_image_model_string
 from wagtail.images.api.fields import ImageRenditionField
 from wagtail.images.edit_handlers import ImageChooserPanel
@@ -28,6 +32,7 @@ from wagtail.snippets.models import register_snippet
 from dateutil.parser import parse
 from dateutil.parser._parser import ParserError
 
+from jpl.icontact.models import Message
 from wagtail_content_import.models import ContentImportMixin
 
 from .blocks import StoryBlock, StoryBlockMapper
@@ -113,6 +118,10 @@ class NewsPage(ContentImportMixin, Page):
     source = models.TextField(
         blank=True, help_text="Where was this content imported from?",
     )
+    publish_to_icontact = models.BooleanField(
+        default=False,
+        help_text="If checked, a draft message will be created on iContact the next time this page is published",
+    )
 
     mapper_class = StoryBlockMapper
 
@@ -137,6 +146,7 @@ class NewsPage(ContentImportMixin, Page):
 
     settings_panels = Page.settings_panels + [
         FieldPanel("source"),
+        FieldPanel("publish_to_icontact"),
     ]
 
     edit_handler = TabbedInterface(
@@ -159,7 +169,6 @@ class NewsPage(ContentImportMixin, Page):
         ),
     ]
 
-
     @classmethod
     def create_from_import(cls, parsed_doc, user):
         """
@@ -173,7 +182,7 @@ class NewsPage(ContentImportMixin, Page):
         mapper = mapper_class()
         imported_data = mapper.map(parsed_doc['elements'], user=user)
 
-        date_matching_pattern =  re.compile(r"""
+        date_matching_pattern = re.compile(r"""
         [a-z]+  # at least one ascii letter (month)
         \s      # one space after
         \d\d?   # one or two digits (day)
@@ -181,7 +190,7 @@ class NewsPage(ContentImportMixin, Page):
         ,?      # an optional comma
         \s      # one space after
         \d{4}   # four digits (year)
-        """,re.IGNORECASE|re.VERBOSE)
+        """, re.IGNORECASE | re.VERBOSE)
 
         bold_title_matching_pattern = re.compile(r"<b>(.*[a-z].*)</b>", re.IGNORECASE)
 
@@ -222,3 +231,29 @@ class NewsPage(ContentImportMixin, Page):
             owner=user,
             publication_date=date,
         )
+
+
+def publish_to_icontact(sender, instance, **kwargs):
+    if instance.publish_to_icontact:
+        # Reset flag
+        instance.publish_to_icontact = False
+        instance.save()
+
+        context = {'page': instance}
+        html_body = render_to_string('news/news_page_icontact.html', context)
+        soup = BeautifulSoup(render_to_string('news/news_page_icontact.txt', context))
+        text_body = '\n'.join(line.strip() for line in soup.get_text().splitlines())
+
+        # Create message
+        # Creating the message will also create it on iContact
+        Message.objects.create(
+            campaign_id=settings.ICONTACT_SETTINGS["campaign_id"],
+            message_name=f"{sender.__name__}: {instance.pk}",
+            subject=instance.title,
+            html_body=html_body,
+            text_body=text_body,
+            source_page=instance,
+        )
+
+
+page_published.connect(publish_to_icontact, sender=NewsPage)

@@ -24,6 +24,11 @@ env = environ.Env(
     AWS_ACCESS_KEY_ID=(str, ""),
     AWS_SECRET_ACCESS_KEY=(str, ""),
     AWS_STORAGE_BUCKET_NAME=(str, ""),
+    ICONTACT_URL=(str, ""),
+    ICONTACT_APP_ID=(str, ""),
+    ICONTACT_USERNAME=(str, ""),
+    ICONTACT_PASSWORD=(str, ""),
+    ICONTACT_CAMPAIGN_ID=(int, ""),
 )
 
 ALLOWED_HOSTS = env("ALLOWED_HOSTS")
@@ -40,6 +45,7 @@ INSTALLED_APPS = [
     "jpl.home",
     "jpl.search",
     "jpl.news",
+    "jpl.icontact",
     "wagtail_review",
     "wagtail.api.v2",
     "wagtail_content_import",

@@ -103,3 +103,5 @@ tags*
 .nvimrc
 node_modules
 .vscode
+jpl/settings/local.py
+unpacked/
