@@ -38,7 +38,7 @@ class Message(models.Model):
 
     @property
     def icontact_message_id(self):
-        return self.api_response["messageId"]
+        return self.icontact_message.get("messageId")
 
     def save(self, *args, create_message=True, **kwargs):
 
