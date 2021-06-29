@@ -1093,8 +1093,8 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.8.10"
-content-hash = "13113d958c67411a779dbe4c83d8133734c28349c27c87832b8d2c9d881a4b14"
+python-versions = "3.8.10"
+content-hash = "a4d0346289565ade3c35de2daa280ce80139cf1e0fcc134d2b24a48172b67923"
 
 [metadata.files]
 anyascii = [
