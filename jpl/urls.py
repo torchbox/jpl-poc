@@ -7,14 +7,12 @@ from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
 from wagtail_content_import import urls as wagtail_content_import_urls
-from wagtail_review import urls as wagtailreview_urls
 
 from .search import views as search_views
 from jpl.news.api import api_router
 
 
 urlpatterns = [
-    path("review/", include(wagtailreview_urls)),
     path("api/v2/", api_router.urls),
     path("django-admin/", admin.site.urls),
     path("admin/", include(wagtailadmin_urls)),

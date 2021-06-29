@@ -22,7 +22,7 @@ RUN yarn install
 
 # Python dependencies
 WORKDIR /app
-COPY wagtail-2.9a0.tar.gz wagtail-review-0.3a0.tar.gz ./
+COPY wagtail-2.9a0.tar.gz ./
 ADD pyproject.toml poetry.lock ./
 RUN poetry install
 
