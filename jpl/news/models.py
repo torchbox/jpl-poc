@@ -31,7 +31,6 @@ from wagtail.images.api.fields import ImageRenditionField
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.models import register_snippet
 
-from jpl.icontact.models import Message
 from wagtail_content_import.models import ContentImportMixin
 
 from .blocks import StoryBlock, StoryBlockMapper
@@ -117,10 +116,6 @@ class NewsPage(ContentImportMixin, Page):
     source = models.TextField(
         blank=True, help_text="Where was this content imported from?",
     )
-    publish_to_icontact = models.BooleanField(
-        default=False,
-        help_text="If checked, a draft message will be created on iContact the next time this page is published",
-    )
 
     mapper_class = StoryBlockMapper
 
@@ -145,7 +140,6 @@ class NewsPage(ContentImportMixin, Page):
 
     settings_panels = Page.settings_panels + [
         FieldPanel("source"),
-        FieldPanel("publish_to_icontact"),
     ]
 
     edit_handler = TabbedInterface(
@@ -243,28 +237,3 @@ class NewsPage(ContentImportMixin, Page):
         )
 
 
-def publish_to_icontact(sender, instance, **kwargs):
-    if instance.publish_to_icontact:
-        # Reset flag
-        instance.publish_to_icontact = False
-        instance.save()
-
-        context = {"page": instance}
-        html_body = render_to_string("news/news_page_icontact.html", context)
-        text_body = html.unescape(
-            strip_tags(render_to_string("news/news_page_icontact.txt", context))
-        )
-
-        # Create message
-        # Creating the message will also create it on iContact
-        Message.objects.create(
-            campaign_id=settings.ICONTACT_SETTINGS["campaign_id"],
-            message_name=f"{sender.__name__}: {instance.pk}",
-            subject=instance.title,
-            html_body=html_body,
-            text_body=text_body,
-            source_page=instance,
-        )
-
-
-page_published.connect(publish_to_icontact, sender=NewsPage)
