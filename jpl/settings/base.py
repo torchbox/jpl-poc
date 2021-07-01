@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "wagtail_content_import",
     "wagtail_content_import.pickers.microsoft",
     "wagtail_content_import.pickers.local",
+    "wagtail_image_import",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.contrib.modeladmin",
