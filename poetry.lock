@@ -1028,6 +1028,23 @@ python-versions = ">=3.6"
 wagtail = ">=2.12"
 
 [[package]]
+name = "wagtailaltgenerator"
+version = "4.1.2"
+description = "Insert image description and tags with the help of computer vision"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+requests = "*"
+wagtail = ">=1.12"
+
+[package.extras]
+google_translate = ["google-cloud-translate"]
+google_vision = ["google-api-python-client (>=1.5.5)"]
+rekognition = ["boto3 (>=1.4,<1.5)"]
+
+[[package]]
 name = "webencodings"
 version = "0.5.1"
 description = "Character encoding aliases for legacy web content"
@@ -1078,7 +1095,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "d51365a0a36663c9f0a17406151c10f7b3b40fba40ebab43898b437f18b3835c"
+content-hash = "8cfcdaa1876ea33e65249d29d741759874459bb355fdf0b826d144b2ff69a797"
 
 [metadata.files]
 anyascii = [
@@ -1658,6 +1675,9 @@ wagtail-content-import = [
 wagtail-image-import = [
     {file = "wagtail_image_import-0.1.1-py3-none-any.whl", hash = "sha256:701fc828575fbfba368ada987e9fc51ee37f932d0475bec49d1f441994523290"},
     {file = "wagtail_image_import-0.1.1.tar.gz", hash = "sha256:b2ab180a87f8786b8d480882f5bff9624e1d620d5d425826531d35f6e4639c26"},
+]
+wagtailaltgenerator = [
+    {file = "wagtailaltgenerator-4.1.2.tar.gz", hash = "sha256:baac6b9a4d1a964c8cadff2f9652132fec4250c3152d24909c5c46c7c19c67c3"},
 ]
 webencodings = [
     {file = "webencodings-0.5.1-py2.py3-none-any.whl", hash = "sha256:a0af1213f3c2226497a97e2b3aa01a7e4bee4f403f95be16fc9acd2947514a78"},

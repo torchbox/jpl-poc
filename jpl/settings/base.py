@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "jpl.search",
     "jpl.news",
     "jpl.icontact",
+    "wagtailaltgenerator",
     "wagtail.api.v2",
     "wagtail_content_import",
     "wagtail_content_import.pickers.microsoft",
@@ -186,3 +187,7 @@ BASE_URL = "https://jpl-poc.torchbox.com"
 CORS_ORIGIN_ALLOW_ALL = True
 
 WAGTAILCONTENTIMPORT_DOCX_PARSER = "jpl.news.parser.DocxHTMLParser"
+
+if 'COMPUTER_VISION_API_KEY' in os.environ:
+    COMPUTER_VISION_API_KEY = os.environ['COMPUTER_VISION_API_KEY']
+    COMPUTER_VISION_REGION = 'northeurope'
